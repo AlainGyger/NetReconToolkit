@@ -1,4 +1,4 @@
-import nmap  # install python-nmap
+import nmap  # install python-nmap using pip3
 
 
 def scan_host(ip_to_scan):
