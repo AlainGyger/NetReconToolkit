@@ -17,5 +17,6 @@ def scan_host(ip_to_scan):
                 print(port, "-", nmap_ps[host][protocol][port]['state'])  # Display each port and it's associated state
 
 
+
 if __name__ == '__main__':
     scan_host("127.0.0.1")  # The IP of the host to scan
