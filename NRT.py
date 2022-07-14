@@ -7,7 +7,8 @@ import logging.handlers
 
 log_filename = "NetReconToolkit.log"  # The filename of the log file. TODO Set log_filename based on settings.txt
 log_rotate_handler = logging.handlers.RotatingFileHandler(log_filename, maxBytes=100000, backupCount=5)  # Enable log file rotation if it exceeds maxBytes, keeping 5 total backup files. TODO Set maxBytes and backupCount via settings.txt
-logging.basicConfig(format='%(asctime)s %(message)s', handlers=[log_rotate_handler], level=logging.DEBUG)  # Instantiate root logger. TODO Set logging level through settings.txt
+logging.basicConfig(format='%(asctime)s >> %(message)s', handlers=[log_rotate_handler], level=logging.DEBUG)  # Instantiate root logger. TODO Set logging level through settings.txt
+logging.info('-----##### Starting NRT #####-----')
 
 
 def database_connection():
@@ -24,6 +25,7 @@ def scan_host(ip_to_scan):
     logging.info('%s - Entering function', current_function_name)
 
     print("Scanning: " + ip_to_scan)  # Display the host we're currently scanning.
+    logging.info('%s - Scanning: %s', current_function_name, ip_to_scan)
     nmap_ps = nmap.PortScanner()  # Create our instance of python-nmap.
     nmap_ps.scan(hosts=ip_to_scan,
                  arguments='-sV -Pn -p22-445')  # Set our host to scan and arguments (sV - Service scan, Pn - don't ping, but assume the port is up, p22-445 - only scan ports 22 through 445).
@@ -40,6 +42,8 @@ def scan_host(ip_to_scan):
 
 if __name__ == '__main__':
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
-    logging.info('%s - Entering function', current_function_name)
+    logging.info('%s - Entering function', "Main")
 
     scan_host("127.0.0.1")  # The IP of the host to scan
+
+    logging.info('-----##### Ending NRT #####-----')
