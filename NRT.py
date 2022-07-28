@@ -11,13 +11,18 @@ logging.basicConfig(format='%(asctime)s >> %(message)s', handlers=[log_rotate_ha
 logging.info('-----##### Starting NRT #####-----')
 
 
-def database_connection():
+def connect_to_database():
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
     logging.info('%s - Entering function', current_function_name)
 
     database_name = "NetReconToolkit.db"
     sqlite3_connection = sqlite3.connect(database_name)  # Create database connection using database_name variable.
     sqlite3_connection.row_factory = sqlite3.Row  # Enable to provide index-based and case-sensitive name-based access to columns (https://docs.python.org/3/library/sqlite3.html#sqlite3.Connection.row_factory).
+    return sqlite3_connection
+
+
+def disconnect_from_database(sqlite3_connection):
+    sqlite3_connection.close()
 
 
 def scan_host(ip_to_scan):
@@ -43,6 +48,8 @@ def scan_host(ip_to_scan):
 if __name__ == '__main__':
     logging.info('%s - Entering function', "Main")
 
+    database_connection = connect_to_database()
     scan_host("127.0.0.1")  # The IP of the host to scan
+    disconnect_from_database(database_connection)
 
     logging.info('-----##### Ending NRT #####-----')
