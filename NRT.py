@@ -22,6 +22,7 @@ def connect_to_database():
 
 
 def disconnect_from_database(sqlite3_connection):
+    sqlite3_connection.commit()
     sqlite3_connection.close()
 
 
@@ -48,8 +49,8 @@ def scan_host(ip_to_scan):
 if __name__ == '__main__':
     logging.info('%s - Entering function', "Main")
 
-    database_connection = connect_to_database()
+    database_connection = connect_to_database()  # Save the database connection as a variable, so we can use it later.
     scan_host("127.0.0.1")  # The IP of the host to scan
-    disconnect_from_database(database_connection)
+    disconnect_from_database(database_connection)  # Pass the currently open database connection variable to close the connection.
 
     logging.info('-----##### Ending NRT #####-----')
