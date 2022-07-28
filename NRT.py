@@ -41,7 +41,6 @@ def scan_host(ip_to_scan):
 
 
 if __name__ == '__main__':
-    current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
     logging.info('%s - Entering function', "Main")
 
     scan_host("127.0.0.1")  # The IP of the host to scan
