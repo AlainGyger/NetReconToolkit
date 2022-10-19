@@ -23,9 +23,12 @@ def connect_to_database():
     logging.info('%s - Entering function', current_function_name)
 
     logging.info('%s - Started database connection', current_function_name)
-    sqlite3_connection = sqlite3.connect(database_name)  # Create database connection using database_name variable.
-    sqlite3_connection.row_factory = sqlite3.Row  # Enable to provide index-based and case-sensitive name-based access to columns (https://docs.python.org/3/library/sqlite3.html#sqlite3.Connection.row_factory). The line of code assigning sqlite3.Row to the row_factory of connection creates what some people call a 'dictionary cursor', - instead of tuples it starts returning 'dictionary' rows after fetchall or fetchone.
-    logging.info('%s - Finished database connection', current_function_name)
+    try:
+        sqlite3_connection = sqlite3.connect(database_name)  # Create database connection using database_name variable.
+        sqlite3_connection.row_factory = sqlite3.Row  # Enable to provide index-based and case-sensitive name-based access to columns (https://docs.python.org/3/library/sqlite3.html#sqlite3.Connection.row_factory). The line of code assigning sqlite3.Row to the row_factory of connection creates what some people call a 'dictionary cursor', - instead of tuples it starts returning 'dictionary' rows after fetchall or fetchone.
+        logging.info('%s - Finished database connection', current_function_name)
+    except:
+        logging.info('%s - Database connection failed', current_function_name)
 
     return sqlite3_connection
 
