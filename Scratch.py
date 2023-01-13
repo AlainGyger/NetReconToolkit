@@ -10,7 +10,7 @@ def single_ip_scan(ip_to_scan):
 
     for line_with_multiple_spaces in nmap_scan_output_raw.split("\n"):  # Replace multiple spaces with one
         line = ' '.join(line_with_multiple_spaces.split())
-        print(line)
+        # print(line)
         if "Nmap scan report for" in line:
             nmap_result_dict["HostIP"] = line.split(' ')[5][1:-1]
             nmap_result_dict["HostName"] = line.split(' ')[4]
