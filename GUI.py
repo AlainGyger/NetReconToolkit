@@ -43,7 +43,7 @@ def main(stdscr):
     y = height
     x = width
     box_list = []
-    for i in range(10):
+    for i in range(15):
         box = stdscr.subwin(3, 5, y, x + i * 6)
         box.box()
         box_list.append(box)
