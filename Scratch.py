@@ -27,10 +27,16 @@ def single_ip_scan(ip_to_scan):
     return nmap_result_dict
 
 
-def scan_scheduler():  # Automate when we scan an IP
+def scan_scheduler():
+    # Automate when we scan an IP
 
-def ip_slicer():  # Nmap seems to have trouble with scanning extremely large sets of IP addresses, we'll break them up and send them one at a time
 
+def ip_slicer():
+    # Nmap seems to have trouble with scanning extremely large sets of IP addresses, we'll break them up and send them one at a time
+
+
+def input_sanitation():
+    # Make sure there are nothing but IPs on the commandline
 
 
 
