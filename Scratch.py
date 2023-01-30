@@ -39,6 +39,7 @@ def input_sanitation():
     # Make sure there are nothing but IPs on the commandline
 
 
+def write_scan_results_to_db():
 
 
 
