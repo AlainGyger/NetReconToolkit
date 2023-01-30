@@ -3,6 +3,9 @@ import inspect
 
 
 def single_ip_scan(ip_to_scan):
+    current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
+    print('%s - Entering function', current_function_name)
+
     result = subprocess.run(['nmap', ip_to_scan, '-p-', '-T5'], stdout=subprocess.PIPE)
 
     nmap_scan_output_raw = result.stdout.decode('utf-8')
@@ -30,26 +33,35 @@ def single_ip_scan(ip_to_scan):
 
 def scan_scheduler():
     # Automate when we scan an IP
-
-
-def ip_slicer():
-    # Nmap seems to have trouble with scanning extremely large sets of IP addresses, we'll break them up and send them one at a time
-
-
-def input_sanitation():
-    # Make sure there are nothing but IPs on the commandline
-
-
-def write_scan_results_to_db():
-
-
-def target_randomizer():
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
     print('%s - Entering function', current_function_name)
 
 
+def ip_slicer():
+    # Nmap seems to have trouble with scanning extremely large sets of IP addresses, we'll break them up and send them one at a time
+    current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
+    print('%s - Entering function', current_function_name)
+
+
+def input_sanitation():
+    # Make sure there are nothing but IPs on the commandline
+    current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
+    print('%s - Entering function', current_function_name)
+
+
+def write_scan_results_to_db():
+    current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
+    print('%s - Entering function', current_function_name)
+
+
+def target_randomizer():
+    # Receive a target list, randomize it, and return the resulting list
+    current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
+    print('%s - Entering function', current_function_name)
+
 
 if __name__ == '__main__':
+    print('%s - Entering function', "Main")
     nmap_result_list = []
 
     ips_to_scan = ['127.0.0.1', '172.16.4.1']
