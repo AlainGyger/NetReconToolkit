@@ -1,4 +1,5 @@
 import subprocess
+import inspect
 
 
 def single_ip_scan(ip_to_scan):
@@ -40,6 +41,11 @@ def input_sanitation():
 
 
 def write_scan_results_to_db():
+
+
+def target_randomizer():
+    current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
+    print('%s - Entering function', current_function_name)
 
 
 
