@@ -64,6 +64,12 @@ def target_randomizer(list_to_shuffle):
     return shuffled_list
 
 
+def validate_ip(list_to_shuffle):
+    # Validate that and IP is a valid IPv4 address
+    current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
+    print('%s - Entering function', current_function_name)
+
+
 if __name__ == '__main__':
     print('%s - Entering function', "Main")
     nmap_result_list = []
