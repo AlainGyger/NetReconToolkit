@@ -1,5 +1,6 @@
 import subprocess
 import inspect
+import random
 
 
 def single_ip_scan(ip_to_scan):
@@ -54,10 +55,13 @@ def write_scan_results_to_db():
     print('%s - Entering function', current_function_name)
 
 
-def target_randomizer():
+def target_randomizer(list_to_shuffle):
     # Receive a target list, randomize it, and return the resulting list
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
     print('%s - Entering function', current_function_name)
+    shuffled_list = list_to_shuffle
+    random.shuffle(shuffled_list)
+    return shuffled_list
 
 
 if __name__ == '__main__':
