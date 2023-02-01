@@ -70,6 +70,12 @@ def validate_ip(list_to_shuffle):
     print('%s - Entering function', current_function_name)
 
 
+def ip_range_breaker():
+    # Expand IP ranges into a list of individual IPs (ie. 192.168.0.0/31 = [192.168.0.0, 192.168.0.1]
+    current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
+    print('%s - Entering function', current_function_name)
+
+
 if __name__ == '__main__':
     print('%s - Entering function', "Main")
     nmap_result_list = []
