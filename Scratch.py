@@ -1,6 +1,7 @@
 import subprocess
 import inspect
 import random
+from ipaddress import IPv4Network
 
 
 def single_ip_scan(ip_to_scan):
@@ -70,10 +71,20 @@ def validate_ip(list_to_shuffle):
     print('%s - Entering function', current_function_name)
 
 
-def ip_range_breaker():
+def ip_range_breaker(ip_range):
     # Expand IP ranges into a list of individual IPs (ie. 192.168.0.0/31 = [192.168.0.0, 192.168.0.1]
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
     print('%s - Entering function', current_function_name)
+    try:
+        network = IPv4Network(ip_range)
+        ip_range_list = []
+        for individual_ip in network:
+            ip_range_list.append(individual_ip)
+        return ip_range_list
+    finally:
+        print(ip_range + " is not a valid IPv4 range.")
+        exit()
+
 
 
 if __name__ == '__main__':
