@@ -1,3 +1,4 @@
+import ipaddress
 import subprocess
 import inspect
 import random
@@ -6,7 +7,7 @@ from ipaddress import IPv4Network
 
 def single_ip_scan(ip_to_scan):
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
-    print('%s - Entering function', current_function_name)
+    print(current_function_name + " - Entering function")
 
     result = subprocess.run(['nmap', ip_to_scan, '-p-', '-T5'], stdout=subprocess.PIPE)
 
@@ -36,45 +37,51 @@ def single_ip_scan(ip_to_scan):
 def scan_scheduler():
     # Automate when we scan an IP
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
-    print('%s - Entering function', current_function_name)
+    print(current_function_name + " - Entering function")
 
 
 def ip_slicer():
     # Nmap seems to have trouble with scanning extremely large sets of IP addresses, we'll break them up and send them one at a time
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
-    print('%s - Entering function', current_function_name)
+    print(current_function_name + " - Entering function")
 
 
 def input_sanitation():
     # Make sure there are nothing but IPs on the commandline
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
-    print('%s - Entering function', current_function_name)
+    print(current_function_name + " - Entering function")
 
 
 def write_scan_results_to_db():
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
-    print('%s - Entering function', current_function_name)
+    print(current_function_name + " - Entering function")
 
 
 def target_randomizer(list_to_shuffle):
     # Receive a target list, randomize it, and return the resulting list
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
-    print('%s - Entering function', current_function_name)
+    print(current_function_name + " - Entering function")
     shuffled_list = list_to_shuffle
     random.shuffle(shuffled_list)
     return shuffled_list
 
 
-def validate_ip(list_to_shuffle):
+def validate_ip(ip_to_verify):
     # Validate that and IP is a valid IPv4 address
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
-    print('%s - Entering function', current_function_name)
+    print(current_function_name + " - Entering function")
+
+    try:
+        ip_object = ipaddress.ip_address(ip_to_verify)
+        return True
+    except ValueError:
+        return False
 
 
 def ip_range_breaker(ip_range):
     # Expand IP ranges into a list of individual IPs (ie. 192.168.0.0/31 = [192.168.0.0, 192.168.0.1]
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
-    print('%s - Entering function', current_function_name)
+    print(current_function_name + " - Entering function")
     try:
         network = IPv4Network(ip_range)
         ip_range_list = []
@@ -87,12 +94,21 @@ def ip_range_breaker(ip_range):
 
 
 if __name__ == '__main__':
-    print('%s - Entering function', "Main")
+    print("Main - Entering function")
     nmap_result_list = []
 
-    ips_to_scan = ['127.0.0.1', '172.16.4.1']
+    ips_to_scan = ['127.0.0.1', '172.16.4.1', '1.1111.23.2']
+
+    invalid_ips = []
 
     for ip in ips_to_scan:
-        nmap_result_list.append(single_ip_scan(ip))
+        if validate_ip(ip) == True:
+            nmap_result_list.append(single_ip_scan(ip))
+        else:
+            invalid_ips.append(ip)
+
 
     print(nmap_result_list)
+
+    print("Invalid IPs ---- ")
+    print(invalid_ips)
