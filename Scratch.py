@@ -93,6 +93,16 @@ def ip_range_breaker(ip_range):
         exit()
 
 
+def display_results_as_table(scan_result_dictionary):
+    # Print the names of the columns.
+    print("{:<10} {:<10} {:<10}".format('NAME', 'AGE', 'COURSE'))
+
+    # print each data item.
+    for key, value in scan_result_dictionary.items():
+        HostIP, HostName, HostState = value
+        print("{:<10} {:<10} {:<10}".format(HostIP, HostName, HostState))
+
+
 if __name__ == '__main__':
     print("Main - Entering function")
     nmap_result_list = []
@@ -109,6 +119,7 @@ if __name__ == '__main__':
 
 
     print(nmap_result_list)
+    display_results_as_table(nmap_result_list[0])
 
     print("Invalid IPs ---- ")
     print(invalid_ips)
