@@ -86,7 +86,6 @@ def ip_range_breaker(ip_range):
         exit()
 
 
-
 if __name__ == '__main__':
     print('%s - Entering function', "Main")
     nmap_result_list = []
