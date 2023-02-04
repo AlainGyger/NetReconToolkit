@@ -3,6 +3,8 @@ import subprocess
 import inspect
 import random
 from ipaddress import IPv4Network
+import schedule
+import time
 
 
 def single_ip_scan(ip_to_scan):
@@ -34,10 +36,16 @@ def single_ip_scan(ip_to_scan):
     return nmap_result_dict
 
 
-def scan_scheduler():
+def scan_scheduler(interval_in_seconds):
     # Automate when we scan an IP
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
     print(current_function_name + " - Entering function")
+
+    schedule.every(interval_in_seconds).seconds.do(single_ip_scan)
+
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
 
 def ip_slicer():
