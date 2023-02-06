@@ -54,6 +54,8 @@ def ip_slicer():
     print(current_function_name + " - Entering function")
 
 
+
+
 def input_sanitation():
     # Make sure there are nothing but IPs on the commandline
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
