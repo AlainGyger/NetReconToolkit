@@ -48,11 +48,13 @@ def scan_scheduler(interval_in_seconds):
         time.sleep(1)
 
 
-def ip_slicer():
+def ip_slicer(list_of_ips):
     # Nmap seems to have trouble with scanning extremely large sets of IP addresses, we'll break them up and send them one at a time
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
     print(current_function_name + " - Entering function")
 
+    for single_ip in list_of_ips:
+        single_ip_scan(single_ip)
 
 
 
