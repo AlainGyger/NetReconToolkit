@@ -125,7 +125,7 @@ def display_results_as_table(scan_result_dictionary):
 
     # print each data item.
     for key, value in scan_result_dictionary.items():
-        HostIP, HostName, HostState = value
+        HostIP, HostName, HostState, HostLatencySeconds, ScanTimeSeconds = value
         print("{:<10} {:<10} {:<10}".format(HostIP, HostName, HostState))
 
 
@@ -145,7 +145,7 @@ if __name__ == '__main__':
 
 
     print(nmap_result_list)
-    display_results_as_table(nmap_result_list[0])
+    #display_results_as_table(nmap_result_list[0])
 
     print("Invalid IPs ---- ")
     print(invalid_ips)
