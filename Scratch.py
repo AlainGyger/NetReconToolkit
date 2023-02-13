@@ -1,4 +1,5 @@
 import ipaddress
+import sqlite3
 import subprocess
 import inspect
 import random
@@ -30,7 +31,7 @@ def single_ip_scan(ip_to_scan):
         if "Note: Host seems down." in line:
             nmap_result_dict["HostState"] = line.split(' ')[3][:-1]
         if "/tcp" in line or "/udp" in line:
-            nmap_result_dict.update({line.split(' ')[0] + '/' + line.split(' ')[1]: line.split(' ')[2]})
+            nmap_result_dict.update({line.split(' ')[1]: line.split(' ')[2] + '_' + line.split(' ')[0].replace('/', '_')})
         if " scanned in " in line:
             nmap_result_dict["ScanTimeSeconds"] = line.split(' ')[10]
 
@@ -121,31 +122,62 @@ def ip_range_breaker(ip_range):
 
 def display_results_as_table(scan_result_dictionary):
     # Print the names of the columns.
-    print("{:<10} {:<10} {:<10}".format('NAME', 'AGE', 'COURSE'))
+    print("{:<10} {:<10} {:<10} {:<10} {:<10}".format('IP', 'NAME', 'STATE', 'LATENCY', 'SCAN_TIME'))
 
     # print each data item.
     for key, value in scan_result_dictionary.items():
-        HostIP, HostName, HostState, HostLatencySeconds, ScanTimeSeconds = value
-        print("{:<10} {:<10} {:<10}".format(HostIP, HostName, HostState))
+        host_ip, host_name, host_state, host_latency_seconds, scan_time_seconds = value
+        # print(value)
+        print("{:<10} {:<10} {:<10}".format(host_ip, host_name, host_state))
+
+
+def display_table(table_name):
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute(f"SELECT * FROM {table_name}")
+    rows = cursor.fetchall()
+
+    for row in rows:
+        print(row)
+
+    conn.close()
+
+
+def dict_to_table(data, table_name):
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    keys = ", ".join(data.keys())
+    values = tuple(data.values())
+
+    cursor.execute(f"CREATE TABLE IF NOT EXISTS {table_name} ({keys})")
+    cursor.execute(f"INSERT INTO {table_name} ({keys}) VALUES {values}")
+
+    conn.commit()
+    conn.close()
 
 
 if __name__ == '__main__':
     print("Main - Entering function")
     nmap_result_list = []
 
-    ips_to_scan = ['127.0.0.1', '172.16.4.1', '1.1111.23.2']
+    ips_to_scan = ['127.0.0.1', '192.168.0.1', '172.16.4.1', '1.1111.23.2']
 
     invalid_ips = []
 
     for ip in ips_to_scan:
         if validate_ip(ip) == True:
             nmap_result_list.append(single_ip_scan(ip))
+            dict_to_table(nmap_result_list[0], 'results')
         else:
             invalid_ips.append(ip)
 
 
     print(nmap_result_list)
     #display_results_as_table(nmap_result_list[0])
+
+    display_table('results')
 
     print("Invalid IPs ---- ")
     print(invalid_ips)
