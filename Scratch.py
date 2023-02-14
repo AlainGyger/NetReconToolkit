@@ -7,6 +7,8 @@ from ipaddress import IPv4Network
 import schedule
 import time
 import re
+from tabulate import tabulate
+
 
 
 def single_ip_scan(ip_to_scan):
@@ -144,6 +146,16 @@ def display_table(table_name):
     conn.close()
 
 
+def display_table_in_tabular(table_name):
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+    cursor.execute(f"SELECT * FROM {table_name}")
+    rows = cursor.fetchall()
+    columns = [description[0] for description in cursor.description]
+    print(tabulate(rows, headers=columns))
+    conn.close()
+
+
 def dict_to_table(data, table_name):
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
@@ -177,7 +189,7 @@ if __name__ == '__main__':
     print(nmap_result_list)
     #display_results_as_table(nmap_result_list[0])
 
-    display_table('results')
+    display_table_in_tabular('results')
 
     print("Invalid IPs ---- ")
     print(invalid_ips)
