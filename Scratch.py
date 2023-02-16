@@ -15,7 +15,7 @@ def single_ip_scan(ip_to_scan):
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
     print(current_function_name + " - Entering function")
 
-    result = subprocess.run(['nmap', ip_to_scan, '-p-', '-T5'], stdout=subprocess.PIPE)
+    result = subprocess.run(['nmap', ip_to_scan, '-p-', '-T5', '-Pn'], stdout=subprocess.PIPE)
 
     nmap_scan_output_raw = result.stdout.decode('utf-8')
 
@@ -174,7 +174,7 @@ if __name__ == '__main__':
     print("Main - Entering function")
     nmap_result_list = []
 
-    ips_to_scan = ['127.0.0.1', '192.168.0.1', '172.16.4.1', '1.1111.23.2']
+    ips_to_scan = ['127.0.0.1', '1.1111.23.2']
 
     invalid_ips = []
 
