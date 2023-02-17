@@ -8,7 +8,17 @@ import schedule
 import time
 import re
 from tabulate import tabulate
+import socket
 
+
+def get_local_ip():
+    """
+    Get the local IP address of the machine.
+
+    Returns:
+        str: The local IP address of the machine.
+    """
+    return socket.gethostbyname(socket.gethostname())
 
 
 def single_ip_scan(ip_to_scan):
