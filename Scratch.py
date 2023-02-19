@@ -15,13 +15,10 @@ import netifaces
 def get_all_ips():
     ip_list = []
     for interface in netifaces.interfaces():
-        # get all addresses for this interface
         addrs = netifaces.ifaddresses(interface)
         for ip_version in (socket.AF_INET, socket.AF_INET6):
-            # get all addresses for this IP version (IPv4 or IPv6)
             ips = addrs.get(ip_version, [])
             for single_ip in ips:
-                # only add IP addresses (not hostnames)
                 if 'addr' in single_ip:
                     ip_list.append(single_ip['addr'])
     return ip_list
