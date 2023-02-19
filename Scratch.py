@@ -9,10 +9,22 @@ import time
 import re
 from tabulate import tabulate
 import socket
+import netifaces
 
 
-def get_local_ip():
-    return socket.gethostbyname(socket.gethostname())
+def get_all_ips():
+    ip_list = []
+    for interface in netifaces.interfaces():
+        # get all addresses for this interface
+        addrs = netifaces.ifaddresses(interface)
+        for ip_version in (socket.AF_INET, socket.AF_INET6):
+            # get all addresses for this IP version (IPv4 or IPv6)
+            ips = addrs.get(ip_version, [])
+            for single_ip in ips:
+                # only add IP addresses (not hostnames)
+                if 'addr' in single_ip:
+                    ip_list.append(single_ip['addr'])
+    return ip_list
 
 
 def single_ip_scan(ip_to_scan):
@@ -176,6 +188,8 @@ def dict_to_table(data, table_name):
 
 if __name__ == '__main__':
     print("Main - Entering function")
+    for ip in get_all_ips():
+        print("Your IP is: " + str(ip))
     nmap_result_list = []
 
     ips_to_scan = ['127.0.0.1', '1.1111.23.2']
