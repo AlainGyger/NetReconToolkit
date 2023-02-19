@@ -12,12 +12,6 @@ import socket
 
 
 def get_local_ip():
-    """
-    Get the local IP address of the machine.
-
-    Returns:
-        str: The local IP address of the machine.
-    """
     return socket.gethostbyname(socket.gethostname())
 
 
