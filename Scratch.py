@@ -15,9 +15,9 @@ import netifaces
 def get_all_ips():
     ip_list = []
     for interface in netifaces.interfaces():
-        addrs = netifaces.ifaddresses(interface)
+        addresses = netifaces.ifaddresses(interface)
         for ip_version in (socket.AF_INET, socket.AF_INET6):
-            ips = addrs.get(ip_version, [])
+            ips = addresses.get(ip_version, [])
             for single_ip in ips:
                 if 'addr' in single_ip:
                     ip_list.append(single_ip['addr'])
@@ -93,6 +93,7 @@ def input_sanitation(input_string):
     elif range_pattern.search(input_string):
         return input_string
     return None
+
 
 def write_scan_results_to_db():
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
