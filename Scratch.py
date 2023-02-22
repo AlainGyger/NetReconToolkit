@@ -1,3 +1,4 @@
+import datetime
 import ipaddress
 import sqlite3
 import subprocess
@@ -184,6 +185,12 @@ def dict_to_table(data, table_name):
     conn.close()
 
 
+def current_datetime():
+    now = datetime.datetime.now()
+    now_string = now.strftime("%Y_%m_%d_%H_%M_%S")
+    return now_string
+
+
 if __name__ == '__main__':
     print("Main - Entering function")
     for ip in get_all_ips():
@@ -194,10 +201,12 @@ if __name__ == '__main__':
 
     invalid_ips = []
 
+    table_name = 'results_' + current_datetime()
+
     for ip in ips_to_scan:
         if validate_ip(ip) == True:
             nmap_result_list.append(single_ip_scan(ip))
-            dict_to_table(nmap_result_list[0], 'results')
+            dict_to_table(nmap_result_list[0], table_name)
         else:
             invalid_ips.append(ip)
 
@@ -205,7 +214,7 @@ if __name__ == '__main__':
     print(nmap_result_list)
     #display_results_as_table(nmap_result_list[0])
 
-    display_table_in_tabular('results')
+    display_table_in_tabular(table_name)
 
     print("Invalid IPs ---- ")
     print(invalid_ips)
