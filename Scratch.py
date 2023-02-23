@@ -162,6 +162,18 @@ def display_table(table_name):
 
     conn.close()
 
+def display_all_tables():
+    conn = sqlite3.connect(database_name)
+    cursor = conn.cursor()
+
+    cursor.execute(f"SELECT name FROM sqlite_schema WHERE type ='table' AND name NOT LIKE 'sqlite_%'")
+    rows = cursor.fetchall()
+
+    for row in rows:
+        print(row)
+
+    conn.close()
+
 
 def display_table_in_tabular(table_name):
     conn = sqlite3.connect(database_name)
@@ -202,7 +214,7 @@ if __name__ == '__main__':
     ips_to_scan = ['127.0.0.1', '1.1111.23.2']
 
     invalid_ips = []
-
+    display_all_tables()
     table_name = 'results_' + current_datetime()
 
     for ip in ips_to_scan:
