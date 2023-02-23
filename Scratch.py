@@ -12,6 +12,8 @@ from tabulate import tabulate
 import socket
 import netifaces
 
+database_name = 'database.db'
+
 
 def get_all_ips():
     ip_list = []
@@ -149,7 +151,7 @@ def display_results_as_table(scan_result_dictionary):
 
 
 def display_table(table_name):
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(database_name)
     cursor = conn.cursor()
 
     cursor.execute(f"SELECT * FROM {table_name}")
@@ -162,7 +164,7 @@ def display_table(table_name):
 
 
 def display_table_in_tabular(table_name):
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(database_name)
     cursor = conn.cursor()
     cursor.execute(f"SELECT * FROM {table_name}")
     rows = cursor.fetchall()
@@ -172,7 +174,7 @@ def display_table_in_tabular(table_name):
 
 
 def dict_to_table(data, table_name):
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(database_name)
     cursor = conn.cursor()
 
     keys = ", ".join(data.keys())
