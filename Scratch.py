@@ -162,17 +162,21 @@ def display_table(table_name):
 
     conn.close()
 
+
 def display_all_tables():
     conn = sqlite3.connect(database_name)
     cursor = conn.cursor()
 
-    cursor.execute(f"SELECT name FROM sqlite_schema WHERE type ='table' AND name NOT LIKE 'sqlite_%'")
+    cursor.execute(f"SELECT name FROM sqlite_schema WHERE type ='table' AND name LIKE 'results_%'")
     rows = cursor.fetchall()
 
+    results_tables = []
     for row in rows:
-        print(row)
+        results_tables.append(row)
 
     conn.close()
+
+    return results_tables
 
 
 def display_table_in_tabular(table_name):
@@ -230,5 +234,5 @@ if __name__ == '__main__':
 
     display_table_in_tabular(table_name)
 
-    print("Invalid IPs ---- ")
+    print("Invalid IP Addresses ---- ")
     print(invalid_ips)
