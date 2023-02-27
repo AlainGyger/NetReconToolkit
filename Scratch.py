@@ -11,6 +11,8 @@ import re
 from tabulate import tabulate
 import socket
 import netifaces
+import subprocess
+from tqdm import tqdm
 
 database_name = 'database.db'
 
@@ -31,9 +33,16 @@ def single_ip_scan(ip_to_scan):
     current_function_name = inspect.getframeinfo(inspect.currentframe()).function  # Get the name of the current function for logging purposes
     print(current_function_name + " - Entering function")
 
-    result = subprocess.run(['nmap', ip_to_scan, '-p-', '-T5', '-Pn'], stdout=subprocess.PIPE)
+    # result = subprocess.run(['nmap', ip_to_scan, '-p-', '-T5', '-Pn'], stdout=subprocess.PIPE)
+    # nmap_scan_output_raw = result.stdout.decode('utf-8')
 
-    nmap_scan_output_raw = result.stdout.decode('utf-8')
+    result = subprocess.Popen(['nmap', ip_to_scan, '-p-', '-T5', '-Pn'], stdout=subprocess.PIPE)
+    stdout, _ = result.communicate()
+    pid = result.pid
+
+    is_process_running(pid, True)
+
+    nmap_scan_output_raw = stdout.decode('utf-8')
 
     nmap_result_dict = {"HostIP": ip_to_scan, "HostName": "", "HostState": "", "HostLatencySeconds": "", "ScanTimeSeconds": ""}
 
@@ -201,6 +210,20 @@ def dict_to_table(data, table_name):
 
     conn.commit()
     conn.close()
+
+
+def is_process_running(pid, show_progress=False):
+    process = subprocess.Popen(['ps', '-p', str(pid)], stdout=subprocess.PIPE)
+    output, error = process.communicate()
+    running = process.poll() is None
+
+    if show_progress:
+        bar_format = '{desc}: {percentage:3.0f}%|{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]'
+        progress_bar = tqdm(total=1, desc='Checking process status', bar_format=bar_format)
+        progress_bar.update(int(running))
+        progress_bar.close()
+
+    return running
 
 
 def current_datetime():
