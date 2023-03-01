@@ -257,5 +257,5 @@ if __name__ == '__main__':
 
     display_table_in_tabular(table_name)
 
-    print("Invalid IP Addresses ---- ")
+    print("---- Invalid IP Addresses ---- ")
     print(invalid_ips)
