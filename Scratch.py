@@ -93,7 +93,8 @@ def input_sanitation(input_string):
 
     ipv4_pattern = re.compile(r"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")
     cidr_pattern = re.compile(r"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/\d{1,2}$")
-    ipv6_pattern = re.compile(r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))$")
+    ipv6_pattern = re.compile(
+        r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))$")
     range_pattern = re.compile(r"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)-(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")
 
     if ipv4_pattern.search(input_string):
@@ -212,6 +213,48 @@ def dict_to_table(data, table_name):
     conn.close()
 
 
+def compare_tables(table1_date, table2_date):
+    # Connect to SQLite database
+    conn = sqlite3.connect(database_name)
+    cursor = conn.cursor()
+
+    # Get column names from table1
+    cursor.execute(f"SELECT * FROM results_{table1_date}")
+    col_names_1 = [description[0] for description in cursor.description]
+
+    # Get column names from table2
+    cursor.execute(f"SELECT * FROM results_{table2_date}")
+    col_names_2 = [description[0] for description in cursor.description]
+
+    # Make sure column names match
+    if col_names_1 != col_names_2:
+        print("Column names don't match")
+        return
+
+    # Get data from table1
+    cursor.execute(f"SELECT * FROM results_{table1_date}")
+    table1_data = cursor.fetchall()
+
+    # Get data from table2
+    cursor.execute(f"SELECT * FROM results_{table2_date}")
+    table2_data = cursor.fetchall()
+
+    # Make sure number of rows match
+    if len(table1_data) != len(table2_data):
+        print("Number of rows don't match")
+        return
+
+    # Compare data
+    for i in range(len(table1_data)):
+        for j in range(len(table1_data[i])):
+            if table1_data[i][j] != table2_data[i][j]:
+                print(f"Data doesn't match at row {i + 1}, column {col_names_1[j]}")
+                return
+
+    # If everything matches
+    print("Data matches!")
+
+
 def is_process_running(pid, show_progress=False):
     process = subprocess.Popen(['ps', '-p', str(pid)], stdout=subprocess.PIPE)
     output, error = process.communicate()
@@ -241,7 +284,12 @@ if __name__ == '__main__':
     ips_to_scan = ['127.0.0.1', '1.1111.23.2']
 
     invalid_ips = []
-    display_all_tables()
+
+    for table in display_all_tables():
+        print(table)
+
+    compare_tables('2023_03_01_16_20_40', '2023_03_01_16_21_39')
+
     table_name = 'results_' + current_datetime()
 
     for ip in ips_to_scan:
@@ -251,9 +299,8 @@ if __name__ == '__main__':
         else:
             invalid_ips.append(ip)
 
-
     print(nmap_result_list)
-    #display_results_as_table(nmap_result_list[0])
+    # display_results_as_table(nmap_result_list[0])
 
     display_table_in_tabular(table_name)
 
