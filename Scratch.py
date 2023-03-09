@@ -288,7 +288,7 @@ if __name__ == '__main__':
     for table in display_all_tables():
         print(table)
 
-    compare_tables('2023_03_01_16_20_40', '2023_03_01_16_21_39')
+    #compare_tables('2023_03_01_16_20_40', '2023_03_01_16_21_39')
 
     table_name = 'results_' + current_datetime()
 
