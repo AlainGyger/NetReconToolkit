@@ -1,3 +1,4 @@
+import curses
 import datetime
 import ipaddress
 import sqlite3
@@ -273,6 +274,40 @@ def current_datetime():
     now = datetime.datetime.now()
     now_string = now.strftime("%Y_%m_%d_%H_%M_%S")
     return now_string
+
+
+def display_table_curses(table_data):
+    # Initialize ncurses
+    screen = curses.initscr()
+    curses.noecho()  # Don't echo input
+    curses.cbreak()  # React to keys instantly
+    screen.keypad(True)  # Enable function keys
+    curses.curs_set(0)  # Hide the cursor
+
+    # Determine the dimensions of the terminal
+    height, width = screen.getmaxyx()
+
+    # Determine the width of each column
+    num_columns = len(table_data[0])
+    column_width = width // num_columns
+
+    # Print the table
+    for row in table_data:
+        for i, cell in enumerate(row):
+            x = i * column_width
+            y = screen.getyx()[0]
+            screen.addstr(y, x, cell.ljust(column_width))
+        screen.addstr("\n")
+
+    # Wait for user input
+    screen.getch()
+
+    # Clean up
+    curses.curs_set(1)  # Show the cursor
+    curses.nocbreak()
+    screen.keypad(False)
+    curses.echo()
+    curses.endwin()
 
 
 if __name__ == '__main__':
