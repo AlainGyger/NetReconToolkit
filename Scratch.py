@@ -276,6 +276,25 @@ def current_datetime():
     return now_string
 
 
+def network_scan(ip_range):
+    """
+    Perform a quick network scan of the given IP range and return a list of active hosts.
+    Args:
+        ip_range (str): The IP range to scan in CIDR notation (e.g. '192.168.0.0/24').
+    Returns:
+        list: A list of active hosts in the IP range.
+    """
+    # Use subprocess to execute the 'ping' command on each IP in the range
+    ping_output = subprocess.run(['ping', '-c', '1', '-w', '1', '-n', ip_range], stdout=subprocess.PIPE, text=True)
+    # Use a regular expression to extract the IP addresses of the active hosts
+    active_hosts = []
+    for line in ping_output.stdout.split('\n'):
+        match = re.search(r'(\d+\.\d+\.\d+\.\d+)', line)
+        if match:
+            active_hosts.append(match.group(1))
+    return active_hosts
+
+
 def display_table_curses(table_data):
     # Initialize ncurses
     screen = curses.initscr()
